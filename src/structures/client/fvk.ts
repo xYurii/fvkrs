@@ -1,7 +1,8 @@
 import { ICommand } from "@types";
-import { Client, ClientOptions, Collection, Events } from "discord.js";
+import { Client, ClientOptions, Collection } from "discord.js";
 import { readdirSync } from "fs";
 import { join } from "path";
+import { DiscordEventListener } from "./event";
 
 export class Fvk extends Client {
   declare prefix: string;
@@ -17,10 +18,27 @@ export class Fvk extends Client {
 
   async initializeClient() {
     await this.loadCommands();
-    this.once(Events.ClientReady, (client) => {
-      console.info(client.user.username, "connected.");
+    await this.loadEvents();
+    return await this.login(process.env.CLIENT_TOKEN);
+  }
+
+  async loadEvents() {
+    const dirs = readdirSync(join(__dirname, "..", "../events/client/")).filter(
+      (file) => {
+        const regex = /\.(js|ts)$/;
+        return regex.test(file);
+      },
+    );
+
+    dirs.forEach(async (file) => {
+      const { default: ClientEvent } = await import(
+        join(__dirname, "..", `../events/client/${file}`)
+      );
+      const event: DiscordEventListener = new ClientEvent(this);
+      this[event.once ? "once" : "on"](event.name, (...args) =>
+        event.execute(...args),
+      );
     });
-    await this.login(process.env.CLIENT_TOKEN);
   }
 
   async loadCommands() {
@@ -29,13 +47,18 @@ export class Fvk extends Client {
     dirs.forEach((dir) => {
       const commandsPath = readdirSync(
         join(__dirname, "..", `../commands/${dir}/`),
-      );
+      ).filter((file) => {
+        const regex = /\.(js|ts)$/;
+        return regex.test(file);
+      });
+
       commandsPath.forEach(async (commandDir) => {
         const filePath = join(
           __dirname,
           "..",
           `../commands/${dir}/${commandDir}`,
         );
+
         const { default: commandClass } = await import(filePath);
         const command: ICommand = new commandClass(this);
 

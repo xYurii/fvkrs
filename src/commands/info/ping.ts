@@ -6,6 +6,7 @@ export default class PingCommand extends Command {
   constructor(client: Fvk) {
     super(client, {
       name: "ping",
+      onlyOwner: false,
     });
   }
 
