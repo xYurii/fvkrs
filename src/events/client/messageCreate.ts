@@ -11,6 +11,15 @@ export default class ReadyEvent extends DiscordEventListener {
 
   async execute(message: Message): Promise<undefined> {
     const prefix = this.client.prefix;
+
+    if (
+      message.content.match(new RegExp(`^<@!?${this.client.user?.id}>( |)$`))
+    ) {
+      message.reply(
+        `Olá! Meu prefixo é \`${prefix}\`, use \`${prefix}help\` para ver meus comandos.`,
+      );
+      return;
+    }
     if (
       !message.guild ||
       message.author.bot ||

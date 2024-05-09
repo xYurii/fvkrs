@@ -30,6 +30,12 @@ export default class User extends Model {
   })
   public money!: 0;
 
+  @Default(0)
+  @Column({
+    type: DataType.BIGINT,
+  })
+  public reward!: 0;
+
   @HasOne(() => Blacklist)
   declare blacklist: Blacklist;
 
