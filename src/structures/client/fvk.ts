@@ -17,8 +17,8 @@ export class Fvk extends Client {
 
   async initializeClient() {
     await this.loadCommands();
-    this.on(Events.ClientReady, (client) => {
-      console.info(client.user.username + " connected.");
+    this.once(Events.ClientReady, (client) => {
+      console.info(client.user.username, "connected.");
     });
     await this.login(process.env.CLIENT_TOKEN);
   }
