@@ -1,7 +1,7 @@
 import { SequelizeAdapter } from "./adapter";
 const { env } = process;
 
-export const db = new SequelizeAdapter({
+const db = new SequelizeAdapter({
   database: env.DB_NAME,
   host: env.DB_HOST,
   username: env.DB_USER,
@@ -11,3 +11,5 @@ export const db = new SequelizeAdapter({
   logging: false,
   models: [__dirname + "/models"],
 });
+
+export { db };
