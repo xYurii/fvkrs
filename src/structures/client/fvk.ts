@@ -2,11 +2,13 @@ import { ICommand } from "@types";
 import { Client, ClientOptions, Collection } from "discord.js";
 import { readdirSync } from "fs";
 import { join } from "path";
+import { db } from "../../database/db";
 import { DiscordEventListener } from "./event";
 
 export class Fvk extends Client {
   declare prefix: string;
   declare commands: Collection<string, ICommand>;
+  declare db: typeof db;
 
   constructor(
     options: ClientOptions = { intents: 3276799, failIfNotExists: false },
@@ -14,9 +16,11 @@ export class Fvk extends Client {
     super(options);
     this.prefix = "..";
     this.commands = new Collection<string, ICommand>();
+    this.db = db;
   }
 
   async initializeClient() {
+    await this.db.initialize().then(() => console.info("database connected."));
     await this.loadCommands();
     await this.loadEvents();
     return await this.login(process.env.CLIENT_TOKEN);
