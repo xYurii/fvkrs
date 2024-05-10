@@ -22,7 +22,7 @@ export default class RewardCommand extends Command {
     const randomNumber = Math.floor(Math.random() * (10000 - 2000 + 1)) + 2000;
     await this.client.db.user.update(
       {
-        money: data.money + randomNumber,
+        money: Number(data.money) + randomNumber,
         reward: Date.now() + 3600000,
       },
       {
