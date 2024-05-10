@@ -21,6 +21,7 @@ export default class HelpCommand extends Command {
     const translations: Record<string, string> = {
       info: "Informações",
       economy: "Economia",
+      mod: "Moderação",
     };
 
     for (const dir of commandsDir) {
@@ -33,7 +34,7 @@ export default class HelpCommand extends Command {
         .map((command) => `\`${command.replace(/\.(ts|js)$/gi, "")}\``)
         .join(", ");
       fields.push({
-        name: translations[dir] + " - " + commandsFiles.length,
+        name: (translations[dir] || dir) + " - " + commandsFiles.length,
         value: commands,
       });
     }

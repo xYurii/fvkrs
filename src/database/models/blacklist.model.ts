@@ -4,6 +4,7 @@ import {
   Column,
   DataType,
   ForeignKey,
+  Index,
   Model,
   PrimaryKey,
   Table,
@@ -17,6 +18,7 @@ import User from "./user.model";
 })
 export default class Blacklist extends Model {
   @PrimaryKey
+  @Index("blacklist_idx")
   @Unique
   @ForeignKey(() => User)
   @Column({

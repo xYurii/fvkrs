@@ -10,8 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.15.2",
+    "discord.js": "^14.12.1",
     "pg": "^8.11.5",
     "sequelize-typescript": "^2.1.6"
+  },
+  "imports": {
+    "@structures/*": [
+      "./dist/src/structures/*"
+    ]
   }
 }
